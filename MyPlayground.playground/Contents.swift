@@ -104,7 +104,6 @@ func longestConsecutiveString(stringsArray: [String], _ n: Int) -> String {
         repeat {
             var removeAt = 0
             var longestString = 0
-            print(longestConsecutiveString)
             for (i, str) in strings.enumerated() {
                 if str.count > longestString {
                     longestString = str.count
@@ -118,6 +117,36 @@ func longestConsecutiveString(stringsArray: [String], _ n: Int) -> String {
     }
 }
 // End of Consecutive strings
+
+// Moves in squared strings (II)
+// http://www.codewars.com/kata/56dbe7f113c2f63570000b86/train/swift
+func mirroredString(_ str: String) -> String {
+    let splittedStrings = str.split(separator: "\n")
+    var reversedStrings: [String] = []
+    for stringToReverse in splittedStrings {
+        reversedStrings.append(String(stringToReverse.reversed()))
+    }
+    return reversedStrings.reversed().joined(separator: "\n")
+}
+
+func selfAndMirrored(_ str: String) -> String {
+    let selfStrings = str.split(separator: "\n")
+    let reversedStrings = mirroredString(str).split(separator: "\n")
+    var selfStringsWithDots: [String] = []
+    for s in selfStrings {
+        let t = s + "...."
+        selfStringsWithDots.append(String(t))
+    }
+    var reversedStringsWithDots: [String] = []
+    for s in reversedStrings {
+        let t = "...." + s
+        reversedStringsWithDots.append(String(t))
+    }
+    let selfStrWithDots = String(selfStringsWithDots.joined(separator: "\n"))
+    let reversedStrWithDots = String(reversedStringsWithDots.joined(separator: "\n"))
+    return String(selfStrWithDots) + "\n" + String(reversedStrWithDots)
+}
+// End of Moves in squared strings (II)
 
 import XCTest
 
@@ -160,6 +189,20 @@ class MyPlaygroundTests: XCTestCase {
         XCTAssertEqual("", longestConsecutiveString(stringsArray: [], 3))
         XCTAssertEqual("wkppqsztdkmvcuwvereiupccauycnjutlvvweqilsfytihvrzlaodfixoyxvyuyvgpck", longestConsecutiveString(stringsArray: ["itvayloxrp","wkppqsztdkmvcuwvereiupccauycnjutlv","vweqilsfytihvrzlaodfixoyxvyuyvgpck"], 2))
         XCTAssertEqual("", longestConsecutiveString(stringsArray: ["lol", "wtf"], 0))
+    }
+    
+    func testMirrorString() {
+        XCTAssertEqual("LyfUVC\nGUFjWk\nABpfre\nJMmPrD\ntcVYqC\nooujif", mirroredString("fijuoo\nCqYVct\nDrPmMJ\nerfpBA\nkWjFUG\nCVUfyL"))
+        XCTAssertEqual("BClf\nhkXz\nMfoc\nvKkr", mirroredString("rkKv\ncofM\nzXkh\nflCB"))
+        XCTAssertEqual("tCey\ngbSC\nvhVJ\ntHVl", mirroredString("lVHt\nJVhv\nCSbg\nyeCt"))
+        XCTAssertEqual("qowo\nGULW\neFmt\noxMQ", mirroredString("QMxo\ntmFe\nWLUG\nowoq"))
+    }
+    
+    func testSelfAndMirror() {
+        XCTAssertEqual("xZBV....\njsbS....\nJcpN....\nfVnP....\n....PnVf\n....NpcJ\n....Sbsj\n....VBZx", selfAndMirrored("xZBV\njsbS\nJcpN\nfVnP"))
+        XCTAssertEqual("uLcq....\nJkuL....\nYirX....\nnwMB....\n....BMwn\n....XriY\n....LukJ\n....qcLu", selfAndMirrored("uLcq\nJkuL\nYirX\nnwMB"))
+        XCTAssertEqual("lVHt....\nJVhv....\nCSbg....\nyeCt....\n....tCey\n....gbSC\n....vhVJ\n....tHVl", selfAndMirrored("lVHt\nJVhv\nCSbg\nyeCt"))
+        XCTAssertEqual("QMxo....\ntmFe....\nWLUG....\nowoq....\n....qowo\n....GULW\n....eFmt\n....oxMQ", selfAndMirrored("QMxo\ntmFe\nWLUG\nowoq"))
     }
 }
 
