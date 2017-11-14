@@ -93,6 +93,32 @@ func great(_ name: String, _ owner: String) -> String {
 }
 // End of Grasshopper - Personalized Message
 
+// Consecutive strings
+// http://www.codewars.com/kata/56a5d994ac971f1ac500003e/train/swift
+func longestConsecutiveString(stringsArray: [String], _ n: Int) -> String {
+    var strings = stringsArray, k = n
+    if strings.count <= 0 || strings.count < k || k <= 0 {
+        return ""
+    } else {
+        var longestConsecutiveString = ""
+        repeat {
+            var removeAt = 0
+            var longestString = 0
+            print(longestConsecutiveString)
+            for (i, str) in strings.enumerated() {
+                if str.count > longestString {
+                    longestString = str.count
+                    removeAt = i
+                }
+            }
+            longestConsecutiveString += strings.remove(at: removeAt)
+            k -= 1
+        } while k > 0
+        return longestConsecutiveString
+    }
+}
+// End of Consecutive strings
+
 import XCTest
 
 class MyPlaygroundTests: XCTestCase {
@@ -126,6 +152,14 @@ class MyPlaygroundTests: XCTestCase {
     func testGreeter() {
         XCTAssertEqual(great("Daniel", "Daniel"), "Hello boss")
         XCTAssertEqual(great("Greg", "Daniel"), "Hello guest")
+    }
+    
+    func testLongestConsecutiveString() {
+        XCTAssertEqual("abigailtheta", longestConsecutiveString(stringsArray: ["zone", "abigail", "theta", "form", "libe", "zas"], 2))
+        XCTAssertEqual("oocccffuucccjjjkkkjyyyeehh", longestConsecutiveString(stringsArray: ["ejjjjmmtthh", "zxxuueeg", "aanlljrrrxx", "dqqqaaabbb", "oocccffuucccjjjkkkjyyyeehh"], 1))
+        XCTAssertEqual("", longestConsecutiveString(stringsArray: [], 3))
+        XCTAssertEqual("wkppqsztdkmvcuwvereiupccauycnjutlvvweqilsfytihvrzlaodfixoyxvyuyvgpck", longestConsecutiveString(stringsArray: ["itvayloxrp","wkppqsztdkmvcuwvereiupccauycnjutlv","vweqilsfytihvrzlaodfixoyxvyuyvgpck"], 2))
+        XCTAssertEqual("", longestConsecutiveString(stringsArray: ["lol", "wtf"], 0))
     }
 }
 
