@@ -191,14 +191,14 @@ class MyPlaygroundTests: XCTestCase {
         XCTAssertEqual("", longestConsecutiveString(stringsArray: ["lol", "wtf"], 0))
     }
     
-    func testMirrorString() {
+    func testMirroredString() {
         XCTAssertEqual("LyfUVC\nGUFjWk\nABpfre\nJMmPrD\ntcVYqC\nooujif", mirroredString("fijuoo\nCqYVct\nDrPmMJ\nerfpBA\nkWjFUG\nCVUfyL"))
         XCTAssertEqual("BClf\nhkXz\nMfoc\nvKkr", mirroredString("rkKv\ncofM\nzXkh\nflCB"))
         XCTAssertEqual("tCey\ngbSC\nvhVJ\ntHVl", mirroredString("lVHt\nJVhv\nCSbg\nyeCt"))
         XCTAssertEqual("qowo\nGULW\neFmt\noxMQ", mirroredString("QMxo\ntmFe\nWLUG\nowoq"))
     }
     
-    func testSelfAndMirror() {
+    func testSelfAndMirrored() {
         XCTAssertEqual("xZBV....\njsbS....\nJcpN....\nfVnP....\n....PnVf\n....NpcJ\n....Sbsj\n....VBZx", selfAndMirrored("xZBV\njsbS\nJcpN\nfVnP"))
         XCTAssertEqual("uLcq....\nJkuL....\nYirX....\nnwMB....\n....BMwn\n....XriY\n....LukJ\n....qcLu", selfAndMirrored("uLcq\nJkuL\nYirX\nnwMB"))
         XCTAssertEqual("lVHt....\nJVhv....\nCSbg....\nyeCt....\n....tCey\n....gbSC\n....vhVJ\n....tHVl", selfAndMirrored("lVHt\nJVhv\nCSbg\nyeCt"))
