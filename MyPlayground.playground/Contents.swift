@@ -148,6 +148,130 @@ func selfAndMirrored(_ str: String) -> String {
 }
 // End of Moves in squared strings (II)
 
+// Doubly linked list from Ray Wenderlich's Swift Algorithm Club
+// https://www.raywenderlich.com/144083/swift-algorithm-club-swift-linked-list-data-structure
+public class Node<T> {
+    var value: T
+    var next: Node<T>?
+    weak var previous: Node<T>?
+
+    init(value: T) {
+        self.value = value
+    }
+}
+
+public class LinkedList<T> {
+    enum LinkedListError: Error {
+        case IndexOutOfBounds
+    }
+    
+    fileprivate var head: Node<T>?
+    private var tail: Node<T>?
+    
+    init(_ members: T...) {
+        for member in members {
+            self.append(value: member)
+        }
+    }
+    
+    public var count: Int {
+        if isEmpty {
+            return 0
+        } else {
+            var i = 1
+            var currentNode = head
+            while currentNode?.next != nil {
+                i += 1
+                currentNode = currentNode?.next
+            }
+            return i
+        }
+    }
+    
+    public var isEmpty: Bool {
+        return head == nil
+    }
+
+    public var first: Node<T>? {
+        return head
+    }
+
+    public var last: Node<T>? {
+        return tail
+    }
+    
+    public func append(value: T) {
+        let newNode = Node(value: value)
+        if let tailNode = tail {
+            newNode.previous = tailNode
+            tailNode.next = newNode
+        } else {
+            head = newNode
+        }
+        tail = newNode
+    }
+    
+    public func nodeAt(index: Int) throws -> Node<T>? {
+        if index > count - 1 || index < 0 {
+            throw LinkedListError.IndexOutOfBounds
+        }
+        if index >= 0 {
+            var node = head
+            var i = index
+            while node != nil {
+                if i == 0 { return node }
+                i -= 1
+                node = node!.next
+            }
+        }
+        return nil
+    }
+    
+    public func removeAll() {
+        head = nil
+        tail = nil
+    }
+    
+    public func remove(node: Node<T>) -> T {
+        let prev = node.previous
+        let next = node.next
+        
+        if let prev = prev {
+            prev.next = next
+        } else {
+            head = next
+        }
+        next?.previous = prev
+        
+        if next == nil {
+            tail = prev
+        }
+        
+        node.previous = nil
+        node.next = nil
+        
+        return node.value
+    }
+}
+
+extension LinkedList: CustomStringConvertible {
+    public var description: String {
+        var text = "["
+        var node = head
+        while node != nil {
+            text += "\(node!.value)"
+            node = node!.next
+            if node != nil { text += ", " }
+        }
+        return text + "]"
+    }
+}
+// End of doubly linked list class definition
+
+// Linked Lists - Get Nth Node
+// http://www.codewars.com/kata/55befc42bfe4d13ab1000007/train/swift
+// tested in testLinkedList unit tests
+
 import XCTest
 
 class MyPlaygroundTests: XCTestCase {
@@ -203,6 +327,24 @@ class MyPlaygroundTests: XCTestCase {
         XCTAssertEqual("uLcq....\nJkuL....\nYirX....\nnwMB....\n....BMwn\n....XriY\n....LukJ\n....qcLu", selfAndMirrored("uLcq\nJkuL\nYirX\nnwMB"))
         XCTAssertEqual("lVHt....\nJVhv....\nCSbg....\nyeCt....\n....tCey\n....gbSC\n....vhVJ\n....tHVl", selfAndMirrored("lVHt\nJVhv\nCSbg\nyeCt"))
         XCTAssertEqual("QMxo....\ntmFe....\nWLUG....\nowoq....\n....qowo\n....GULW\n....eFmt\n....oxMQ", selfAndMirrored("QMxo\ntmFe\nWLUG\nowoq"))
+    }
+    
+    func testLinkedList() {
+        XCTAssertEqual("[1, 2, 3]", LinkedList<Int>(1, 2, 3).description)
+        XCTAssertEqual(1, try LinkedList<Int>(1, 2, 3).nodeAt(index: 0)?.value)
+        XCTAssertEqual(false, LinkedList<Int>(1, 2, 3).isEmpty)
+        XCTAssertEqual(true, LinkedList<Int>().isEmpty)
+        XCTAssertEqual(1, LinkedList<Int>(1, 2, 3).first?.value)
+        XCTAssertEqual(3, LinkedList<Int>(1, 2, 3).last?.value)
+        XCTAssertEqual(2, LinkedList<Int>(1, 2, 3).remove(node: Node<Int>(value: 2)))
+        XCTAssertEqual(3, LinkedList<Int>(1, 2, 3).count)
+        // Strange, because I shouldn't be able to removaAll on list,
+        // but Swift note me that I should use let instead of var
+        let list = LinkedList<Int>(1, 2, 3)
+        list.removeAll()
+        XCTAssertEqual(true, list.isEmpty)
+        XCTAssertThrowsError(try LinkedList<Int>(1, 2, 3).nodeAt(index: 3))
+        XCTAssertEqual(3, try LinkedList<Int>(1, 2, 3).nodeAt(index: 2)?.value)
     }
 }
 
