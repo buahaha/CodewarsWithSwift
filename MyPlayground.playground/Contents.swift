@@ -219,9 +219,9 @@ public class LinkedList<T> {
         head = newFirstNode
     }
     
-    public func nodeAt(index: Int) throws -> Node<T>? {
+    public func nodeAt(index: Int) -> Node<T>? {
         if index > count - 1 || index < 0 {
-            throw LinkedListError.IndexOutOfBounds
+            return nil
         }
         if index >= 0 {
             var node = head
@@ -357,6 +357,95 @@ func dashatize(it: Int) -> String {
 }
 // End of Dashatize it
 
+// Playing on a chessboard
+// http://www.codewars.com/kata/55ab4f980f2d576c070000f4/train/swift
+public class Fraction {
+    
+    var numerator: Int
+    var denominator: Int
+
+    init(numerator: Int, denominator: Int) {
+        self.numerator = numerator
+        self.denominator = denominator
+    }
+    
+    func simplifyFraction() -> Fraction {
+        let gcd = Fraction.greatestCommonDivisor(firstDenominator: self.numerator, secondDenominator: self.denominator)
+        self.numerator = self.numerator / gcd
+        self.denominator = self.denominator / gcd
+        return self
+    }
+    
+    static func greatestCommonDivisor(firstDenominator a: Int, secondDenominator b: Int) -> Int {
+        var x = a, y = b
+        while x != y {
+            if x > y {
+                x = x - y;
+            }
+            else {
+                y = y - x
+            }
+        }
+        return x
+        // Recursive solution to greatest common divisor
+        //        if b == 0 {
+        //            return a;
+        //        }
+        //        else {
+        //            return greatestCommonDivisor(firstDenominator: b, secondDenominator: a % b)
+        //        }
+    }
+}
+// The least common multiple (lcm) of a and b is their product divided
+// by their greatest common divisor (gcd) ( i.e. lcm(a, b) = ab/gcd(a,b))
+extension Fraction {
+    static func + (left: Fraction, right: Fraction) -> Fraction {
+        let gcd = greatestCommonDivisor(firstDenominator: left.denominator, secondDenominator: right.denominator)
+        let lcm = (left.denominator * right.denominator) / gcd
+        let leftNumerator = (lcm / left.denominator) * left.numerator
+        let rightNumerator = (lcm / right.denominator) * right.numerator
+        return Fraction(numerator: leftNumerator + rightNumerator, denominator: lcm).simplifyFraction()
+    }
+}
+public class FractionsBoardCoinTossGame {
+    var chessboard: [[Fraction]]
+    
+    init(xRowsOnXColumns x: Int) {
+        var column: [[Fraction]] = []
+        var counter = 0
+        for i in 1...x {
+            counter = i
+            var row: [Fraction] = []
+            for y in 1...x {
+                row.append(Fraction(numerator: Int(y), denominator: Int(y + counter)))
+            }
+            column.append(row)
+        }
+        self.chessboard = column
+        
+    }
+    
+    func play() -> String {
+        var sum: Fraction?
+        for i in self.chessboard {
+            for y in i {
+                if sum != nil {
+                    sum =  sum! + y
+                    
+                } else {
+                    sum = y
+                }
+            }
+        }
+        if sum?.denominator == 1 {
+            return sum!.numerator.description
+        } else {
+            return [sum!.numerator, sum!.denominator].description
+        }
+    }
+}
+// End of Playing on a chessboard
+
 import XCTest
 
 class MyPlaygroundTests: XCTestCase {
@@ -416,7 +505,7 @@ class MyPlaygroundTests: XCTestCase {
     
     func testLinkedList() {
         XCTAssertEqual("[1, 2, 3]", LinkedList<Int>(1, 2, 3).description)
-        XCTAssertEqual(1, try LinkedList<Int>(1, 2, 3).nodeAt(index: 0)?.value)
+        XCTAssertEqual(1,LinkedList<Int>(1, 2, 3).nodeAt(index: 0)?.value)
         XCTAssertEqual(false, LinkedList<Int>(1, 2, 3).isEmpty)
         XCTAssertEqual(true, LinkedList<Int>().isEmpty)
         XCTAssertEqual(1, LinkedList<Int>(1, 2, 3).first?.value)
@@ -428,12 +517,12 @@ class MyPlaygroundTests: XCTestCase {
         let list = LinkedList<Int>(1, 2, 3)
         list.removeAll()
         XCTAssertEqual(true, list.isEmpty)
-        XCTAssertThrowsError(try LinkedList<Int>(1, 2, 3).nodeAt(index: 3))
-        XCTAssertEqual(3, try LinkedList<Int>(1, 2, 3).nodeAt(index: 2)?.value)
+        XCTAssertEqual(nil, LinkedList<Int>(1).nodeAt(index: 1)?.value)
+        XCTAssertEqual(3, LinkedList<Int>(1, 2, 3).nodeAt(index: 2)?.value)
         let anotherList = LinkedList<Int>(3, 4, 5)
         anotherList.push(value: 2)
         XCTAssertEqual(2, anotherList.first?.value)
-        XCTAssertEqual(3, try anotherList.nodeAt(index: 1)?.value)
+        XCTAssertEqual(3, anotherList.nodeAt(index: 1)?.value)
     }
     
     func testSwitchNumberToStringName() {
@@ -465,6 +554,26 @@ class MyPlaygroundTests: XCTestCase {
         XCTAssertEqual(dashatize(it: 0),"0", "Should return 0")
         XCTAssertEqual(dashatize(it: -1),"1", "Should return 1")
         XCTAssertEqual(dashatize(it: -28369),"28-3-6-9", "Should return 28-3-6-9")
+    }
+    
+    func testGreatestCommonDivisor() {
+        XCTAssertEqual(Fraction.greatestCommonDivisor(firstDenominator: 1071, secondDenominator: 462), 21)
+    }
+    
+    func testSimplifyFraction() {
+        XCTAssertEqual(Fraction(numerator: 4, denominator: 8).simplifyFraction().denominator, 2)
+        XCTAssertEqual(Fraction(numerator: 4, denominator: 8).simplifyFraction().numerator, 1)
+    }
+    
+    func testFractionAddition() {
+        XCTAssertEqual((Fraction(numerator: 1, denominator: 2) + Fraction(numerator: 3, denominator: 4)).numerator, 5)
+        XCTAssertEqual((Fraction(numerator: 1, denominator: 2) + Fraction(numerator: 3, denominator: 4)).denominator, 4)
+    }
+    
+    func testFractionsBoardCoinTossGame() {
+        XCTAssertEqual(FractionsBoardCoinTossGame(xRowsOnXColumns: 2).play(), "2")
+        XCTAssertEqual(FractionsBoardCoinTossGame(xRowsOnXColumns: 3).play(), "[9, 2]")
+        
     }
 }
 
