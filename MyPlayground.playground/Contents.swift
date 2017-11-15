@@ -322,6 +322,41 @@ func multiply(_ a: Int, _ b: Int) -> Int {
 }
 // End of Function 3 - multiplying two numbers
 
+// Dashatize it
+// http://www.codewars.com/kata/58223370aef9fc03fd000071/train/swift
+func dashatize(it: Int) -> String {
+    var dashatized = ""
+    var lastNumberWasOdd = false
+    for number in String(it) {
+        if number == "-" {
+            continue
+        } else {
+            if Int(String(number))! % 2 != 0 {
+                if lastNumberWasOdd {
+                    dashatized += String(number) + "-"
+                    lastNumberWasOdd = true
+                } else {
+                    dashatized += "-" + String(number) + "-"
+                    lastNumberWasOdd = true
+                }
+            } else {
+                dashatized += String(number)
+                lastNumberWasOdd = false
+            }
+        }
+    }
+    if dashatized.hasSuffix("-") {
+        dashatized.remove(at: String.Index(encodedOffset: dashatized.count - 1))
+    }
+    if dashatized.hasPrefix("-") {
+        if let i = dashatized.index(of: "-") {
+            dashatized.remove(at: i)
+        }
+    }
+    return dashatized
+}
+// End of Dashatize it
+
 import XCTest
 
 class MyPlaygroundTests: XCTestCase {
@@ -419,6 +454,17 @@ class MyPlaygroundTests: XCTestCase {
         XCTAssertEqual(12, multiply(6, 2))
         XCTAssertEqual(0, multiply(0, 100))
         XCTAssertEqual(-300, multiply(-50, 6))
+    }
+    
+    func testDashatize() {
+        XCTAssertEqual(dashatize(it: 274),"2-7-4", "Should return 2-7-4")
+        XCTAssertEqual(dashatize(it: 5311),"5-3-1-1", "Should return 5-3-1-1")
+        XCTAssertEqual(dashatize(it: 86320),"86-3-20", "Should return 86-3-20")
+        XCTAssertEqual(dashatize(it: 974302),"9-7-4-3-02", "Should return 9-7-4-3-02")
+        
+        XCTAssertEqual(dashatize(it: 0),"0", "Should return 0")
+        XCTAssertEqual(dashatize(it: -1),"1", "Should return 1")
+        XCTAssertEqual(dashatize(it: -28369),"28-3-6-9", "Should return 28-3-6-9")
     }
 }
 
