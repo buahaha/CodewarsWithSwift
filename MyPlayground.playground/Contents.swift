@@ -211,6 +211,14 @@ public class LinkedList<T> {
         tail = newNode
     }
     
+    public func push(value: T) {
+        let newFirstNode = Node(value: value)
+        let oldFirstNode = head
+        oldFirstNode?.previous = newFirstNode
+        newFirstNode.next = oldFirstNode
+        head = newFirstNode
+    }
+    
     public func nodeAt(index: Int) throws -> Node<T>? {
         if index > count - 1 || index < 0 {
             throw LinkedListError.IndexOutOfBounds
@@ -270,7 +278,9 @@ extension LinkedList: CustomStringConvertible {
 
 // Linked Lists - Get Nth Node
 // http://www.codewars.com/kata/55befc42bfe4d13ab1000007/train/swift
-// tested in testLinkedList unit tests
+// Linked Lists - Push & BuildOneTwoThree
+// http://www.codewars.com/kata/55be95786abade3c71000079/train/swift
+// tested in testLinkedList unit test
 
 // Switch it Up!
 // http://www.codewars.com/kata/5808dcb8f0ed42ae34000031/train/swift
@@ -301,6 +311,16 @@ func switchNumberToStringName(_ number: Int) -> String {
     }
 }
 // End of Switch it Up!
+
+// Function 3 - multiplying two numbers
+// http://www.codewars.com/kata/523b66342d0c301ae400003b/train/swift
+func multiply(_ a: Int, _ b: Int) -> Int {
+    if a == 0 || b == 0 {
+        return 0
+    }
+    return a * b
+}
+// End of Function 3 - multiplying two numbers
 
 import XCTest
 
@@ -368,13 +388,17 @@ class MyPlaygroundTests: XCTestCase {
         XCTAssertEqual(3, LinkedList<Int>(1, 2, 3).last?.value)
         XCTAssertEqual(2, LinkedList<Int>(1, 2, 3).remove(node: Node<Int>(value: 2)))
         XCTAssertEqual(3, LinkedList<Int>(1, 2, 3).count)
-        // Strange, because I shouldn't be able to removaAll on list,
+        // Strange, because I shouldn't be able to removaAll or push on the list,
         // but Swift note me that I should use let instead of var
         let list = LinkedList<Int>(1, 2, 3)
         list.removeAll()
         XCTAssertEqual(true, list.isEmpty)
         XCTAssertThrowsError(try LinkedList<Int>(1, 2, 3).nodeAt(index: 3))
         XCTAssertEqual(3, try LinkedList<Int>(1, 2, 3).nodeAt(index: 2)?.value)
+        let anotherList = LinkedList<Int>(3, 4, 5)
+        anotherList.push(value: 2)
+        XCTAssertEqual(2, anotherList.first?.value)
+        XCTAssertEqual(3, try anotherList.nodeAt(index: 1)?.value)
     }
     
     func testSwitchNumberToStringName() {
@@ -388,6 +412,13 @@ class MyPlaygroundTests: XCTestCase {
         XCTAssertEqual("Seven", switchNumberToStringName(7))
         XCTAssertEqual("Eight", switchNumberToStringName(8))
         XCTAssertEqual("Nine", switchNumberToStringName(9))
+    }
+    
+    func testMultiply() {
+        XCTAssertEqual(9, multiply(3, 3))
+        XCTAssertEqual(12, multiply(6, 2))
+        XCTAssertEqual(0, multiply(0, 100))
+        XCTAssertEqual(-300, multiply(-50, 6))
     }
 }
 
