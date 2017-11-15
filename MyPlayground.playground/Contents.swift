@@ -272,6 +272,36 @@ extension LinkedList: CustomStringConvertible {
 // http://www.codewars.com/kata/55befc42bfe4d13ab1000007/train/swift
 // tested in testLinkedList unit tests
 
+// Switch it Up!
+// http://www.codewars.com/kata/5808dcb8f0ed42ae34000031/train/swift
+func switchNumberToStringName(_ number: Int) -> String {
+    switch number {
+    case 0:
+        return "Zero"
+    case 1:
+        return "One"
+    case 2:
+        return "Two"
+    case 3:
+        return "Three"
+    case 4:
+        return "Four"
+    case 5:
+        return "Five"
+    case 6:
+        return "Six"
+    case 7:
+        return "Seven"
+    case 8:
+        return "Eight"
+    case 9:
+        return "Nine"
+    default:
+        return ""
+    }
+}
+// End of Switch it Up!
+
 import XCTest
 
 class MyPlaygroundTests: XCTestCase {
@@ -345,6 +375,19 @@ class MyPlaygroundTests: XCTestCase {
         XCTAssertEqual(true, list.isEmpty)
         XCTAssertThrowsError(try LinkedList<Int>(1, 2, 3).nodeAt(index: 3))
         XCTAssertEqual(3, try LinkedList<Int>(1, 2, 3).nodeAt(index: 2)?.value)
+    }
+    
+    func testSwitchNumberToStringName() {
+        XCTAssertEqual("Zero", switchNumberToStringName(0))
+        XCTAssertEqual("One", switchNumberToStringName(1))
+        XCTAssertEqual("Two", switchNumberToStringName(2))
+        XCTAssertEqual("Three", switchNumberToStringName(3))
+        XCTAssertEqual("Four", switchNumberToStringName(4))
+        XCTAssertEqual("Five", switchNumberToStringName(5))
+        XCTAssertEqual("Six", switchNumberToStringName(6))
+        XCTAssertEqual("Seven", switchNumberToStringName(7))
+        XCTAssertEqual("Eight", switchNumberToStringName(8))
+        XCTAssertEqual("Nine", switchNumberToStringName(9))
     }
 }
 
