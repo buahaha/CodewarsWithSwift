@@ -471,6 +471,38 @@ func opposite(number: Int) -> Int {
 }
 // End of Opposite number
 
+// Easy Diagonal
+// http://www.codewars.com/kata/559b8e46fa060b2c6a0000bf/train/swift
+// I do not follow exact specification, because I think that it is
+// counter-intuitive to call this function with nthDiagonal: 0 and rows: 0
+func pascalTriangleDiagonalSum(nthDiagonal: Int, rows: Int) -> Int {
+    var triangle: [[Int]] = []
+    for i in 1...nthDiagonal {
+        var diagonal: [Int] = []
+        if i == 1 {
+            for _ in 0..<rows {
+                diagonal.append(1)
+            }
+        } else {
+            for y in 0..<rows {
+                if y == 0 {
+                    diagonal.append(1)
+                } else {
+                    // i = 2
+                    diagonal.append(diagonal[y-1] + triangle[i-2][y])
+                }
+            }
+        }
+        triangle.append(diagonal)
+    }
+    var sum: Int = 0
+    for elem in triangle[nthDiagonal-1] {
+        sum += elem
+    }
+    return sum
+}
+// End of Easy Diagonal
+
 // TDD/BDD section
 // Unit Tests
 import XCTest
@@ -620,6 +652,12 @@ class MyPlaygroundTests: XCTestCase {
     func testOpposite() {
         XCTAssertEqual(opposite(number: 1), -1)
         XCTAssertEqual(opposite(number: -20), 20)
+    }
+    
+    func testPascalTriangleDiagonalSum() {
+        XCTAssertEqual(pascalTriangleDiagonalSum(nthDiagonal: 3, rows: 3), 10)
+        XCTAssertEqual(pascalTriangleDiagonalSum(nthDiagonal: 1, rows: 100), 100)
+        XCTAssertEqual(pascalTriangleDiagonalSum(nthDiagonal: 5, rows: 2), 6)
     }
 }
 
