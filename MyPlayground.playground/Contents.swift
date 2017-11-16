@@ -453,6 +453,17 @@ func boolToString(_ boolean: Bool) -> String {
 }
 // End of Convert a Boolean to a String
 
+// Even or Odd
+// http://www.codewars.com/kata/53da3dbb4a5168369a0000fe/train/swift
+func evenOrOdd(number: Int) -> String {
+    if number % 2 == 0 || number == 0 {
+        return "Even"
+    } else {
+        return "Odd"
+    }
+}
+// End of Even or Odd
+
 // TDD/BDD section
 // Unit Tests
 import XCTest
@@ -588,6 +599,15 @@ class MyPlaygroundTests: XCTestCase {
     func testBoolToString() {
         XCTAssertEqual(boolToString(true), "true")
         XCTAssertEqual(boolToString(false), "false")
+    }
+    
+    func testEvenOrOdd() {
+        XCTAssertEqual(evenOrOdd(number: 1), "Odd")
+        XCTAssertEqual(evenOrOdd(number: 12), "Even")
+        XCTAssertEqual(evenOrOdd(number: 27), "Odd")
+        XCTAssertEqual(evenOrOdd(number: 100), "Even")
+        XCTAssertEqual(evenOrOdd(number: 0), "Even")
+        XCTAssertEqual(evenOrOdd(number: -10), "Even")
     }
 }
 
