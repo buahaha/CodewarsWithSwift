@@ -464,6 +464,13 @@ func evenOrOdd(number: Int) -> String {
 }
 // End of Even or Odd
 
+// Opposite number
+// http://www.codewars.com/kata/56dec885c54a926dcd001095/train/swift
+func opposite(number: Int) -> Int {
+    return -number
+}
+// End of Opposite number
+
 // TDD/BDD section
 // Unit Tests
 import XCTest
@@ -608,6 +615,11 @@ class MyPlaygroundTests: XCTestCase {
         XCTAssertEqual(evenOrOdd(number: 100), "Even")
         XCTAssertEqual(evenOrOdd(number: 0), "Even")
         XCTAssertEqual(evenOrOdd(number: -10), "Even")
+    }
+    
+    func testOpposite() {
+        XCTAssertEqual(opposite(number: 1), -1)
+        XCTAssertEqual(opposite(number: -20), 20)
     }
 }
 
