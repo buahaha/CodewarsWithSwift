@@ -446,6 +446,15 @@ public class FractionsBoardCoinTossGame {
 }
 // End of Playing on a chessboard
 
+// Convert a Boolean to a String
+// http://www.codewars.com/kata/551b4501ac0447318f0009cd/train/swift
+func boolToString(_ boolean: Bool) -> String {
+    return boolean.description
+}
+// End of Convert a Boolean to a String
+
+// TDD/BDD section
+// Unit Tests
 import XCTest
 
 class MyPlaygroundTests: XCTestCase {
@@ -575,6 +584,11 @@ class MyPlaygroundTests: XCTestCase {
         XCTAssertEqual(FractionsBoardCoinTossGame(xRowsOnXColumns: 3).play(), "[9, 2]")
         
     }
+    
+    func testBoolToString() {
+        XCTAssertEqual(boolToString(true), "true")
+        XCTAssertEqual(boolToString(false), "false")
+    }
 }
 
 class TestObserver: NSObject, XCTestObservation {
@@ -585,6 +599,8 @@ class TestObserver: NSObject, XCTestObservation {
         assertionFailure(description, line: UInt(lineNumber))
     }
 }
+
 let testObserver = TestObserver()
 XCTestObservationCenter.shared.addTestObserver(testObserver)
 MyPlaygroundTests.defaultTestSuite.run()
+// End of testing
